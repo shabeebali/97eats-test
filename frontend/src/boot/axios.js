@@ -8,7 +8,7 @@ let axiosInstance = axios.create({
 
 if (process.env.PROD) {
   axiosInstance = axios.create({
-    baseURL: 'https://97eats-laravel.ml/api',
+    baseURL: 'http://97eats-laravel.ml/api',
     withCredentials: true
   })
 }
