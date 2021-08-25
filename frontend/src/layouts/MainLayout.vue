@@ -70,17 +70,38 @@ export default {
   computed: {
   },
   mounted () {
-    this.$store.dispatch('init').then((msg) => {
-      console.log('msg')
-      this.appLoading = false
-    }).catch((msg) => {
-      console.log(msg)
-      if (msg === 'unauthenticated') {
-        this.$router.push('/login')
-      }
-    })
+    this.initFn()
   },
   methods: {
+     initFn () {
+      this.$store.dispatch('init').then((msg) => {
+        console.log('msg')
+        this.appLoading = false
+      }).catch((err) => {
+        if (err === 'unauthenticated') {
+          this.$router.push('/login')
+        }
+        if (err === 'ROUTE_MISSING') {
+          this.$q.dialog({
+            title: 'Select Backend',
+            options: {
+              type: 'radio',
+              model: 'laravel',
+              items: [
+                { label: 'Laravel', value: 'laravel' },
+                { label: 'Codeigniter', value: 'codeigniter' },
+                { label: 'Core PHP', value: 'corephp', disable: true }
+              ]
+            },
+            cancel: false,
+            persistent: true
+          }).onOk((data) => {
+            this.$store.dispatch('setRoute',data)
+            this.initFn()
+          })
+        }
+      })
+    },
     logout () {
       this.$q.dialog({
         title: 'Confirm',

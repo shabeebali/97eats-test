@@ -65,17 +65,40 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('init').then((msg) => {
-      if (msg === 'authenticated') {
-        this.$router.push('/')
-      }
-    }).finally(() => {
-      this.appLoading = false
-    })
+    this.initFn()
   },
   computed: {
   },
   methods: {
+    initFn () {
+      this.$store.dispatch('init').then((msg) => {
+        if (msg === 'authenticated') {
+          this.$router.push('/')
+        }
+      }).catch((err) => {
+        if (err === 'ROUTE_MISSING') {
+          this.$q.dialog({
+            title: 'Select Backend',
+            options: {
+              type: 'radio',
+              model: 'laravel',
+              items: [
+                { label: 'Laravel', value: 'laravel' },
+                { label: 'Codeigniter', value: 'codeigniter' },
+                { label: 'Core PHP', value: 'corephp', disable: true }
+              ]
+            },
+            cancel: false,
+            persistent: true
+          }).onOk((data) => {
+            this.$store.dispatch('setRoute',data)
+            this.initFn()
+          })
+        }
+      }).finally(() => {
+        this.appLoading = false
+      })
+    },
     login () {
       this.$q.loading.show()
       this.$axios.post('login', this.model).then((res) => {
