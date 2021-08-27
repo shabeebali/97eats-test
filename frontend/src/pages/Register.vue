@@ -158,14 +158,20 @@ export default {
               this.$router.push('/login')
             }
           }).catch((err) => {
-            if (err.response.status === 422) {
+            if (err.response.status === 422 || err.response.status === 400) {
               this.$q.notify({
                 type: 'negative',
-                message: err.response.data.message
+                message: 'There are errors in data submitted'
               })
-              Object.keys(err.response.data.errors).forEach((key) => {
-                this.errors[key] = err.response.data.errors[key][0]
-              })
+              if('errors' in err.response.data) {
+                Object.keys(err.response.data.errors).forEach((key) => {
+                  this.errors[key] = err.response.data.errors[key][0]
+                })
+              } else if ('messages' in err.response.data) {
+                Object.keys(err.response.data.messages).forEach((key) => {
+                  this.errors[key] = err.response.data.messages[key]
+                })
+              }
             }
           }).finally(() => this.$q.loading.hide())
         }

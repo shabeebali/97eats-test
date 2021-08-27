@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class User extends Model
+class UserToken extends Model
 {
 	protected $DBGroup              = 'default';
-	protected $table                = 'users';
+	protected $table                = 'user_tokens';
 	protected $primaryKey           = 'id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
 	protected $returnType           = 'array';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
-	protected $allowedFields        = ['name','email','password'];
+	protected $allowedFields        = ['token','user_id'];
 
 	// Dates
 	protected $useTimestamps        = false;

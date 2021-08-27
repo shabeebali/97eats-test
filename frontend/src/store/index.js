@@ -35,12 +35,17 @@ export default function (/* { ssrContext } */) {
     actions: {
       setRoute ({state, commit}, data) {
         commit('setRoute', data)
-        axiosInstance.defaults.baseURL = 'http://97eats-' + data + '.ss/api'
+        if (process.env.PROD) {
+          axiosInstance.defaults.baseURL = 'http://97eats-' + data + '.ml/api'
+        } else {
+          axiosInstance.defaults.baseURL = 'http://97eats-' + data + '.ss/api'
+        }
       },
       init ({ state, commit }) {
         return new Promise(function(resolve,reject) {
           if (!state.route) {
             reject('ROUTE_MISSING')
+            return
           }
           if (localStorage.token) {
             axiosInstance.defaults.headers.common['Authorization'] = 'Bearer '+ localStorage.token

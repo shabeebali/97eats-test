@@ -6,7 +6,7 @@ use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
 use CodeIgniter\Filters\Honeypot;
-
+use App\Filters\TokenAuth;
 class Filters extends BaseConfig
 {
 	/**
@@ -19,6 +19,8 @@ class Filters extends BaseConfig
 		'csrf'     => CSRF::class,
 		'toolbar'  => DebugToolbar::class,
 		'honeypot' => Honeypot::class,
+		'cors' => \Fluent\Cors\Filters\CorsFilter::class,
+		'token' => TokenAuth::class,
 	];
 
 	/**

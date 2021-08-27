@@ -108,7 +108,7 @@ export default {
         }
       }).catch((err) => {
         // console.log(err)
-        if (err.response.status === 422) {
+        if (err.response.status === 422 || err.response.status === 400) {
           this.$q.notify({
             type: 'negative',
             message: 'Incorrect credentials'
