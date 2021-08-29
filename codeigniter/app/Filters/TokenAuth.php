@@ -8,7 +8,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\HTTP\Response;
 use Config\Services;
-
+use Firebase\JWT\JWT;
 class TokenAuth implements FilterInterface
 {
 	/**
@@ -47,7 +47,21 @@ class TokenAuth implements FilterInterface
 				'message' => 'Unauthenticated'
 			]));
 			return $response;
-		} 
+		} else {
+			$key = 'Laravel-97eats';
+			// return $this->respond($requestToken);
+			$decoded = (array) JWT::decode($requestToken,$key,array('HS256'));
+			$userModel = new \App\Models\User();
+			$user = $userModel->find($decoded['user_id']);
+			if(!$user) {
+				$response = Services::response();
+				$response->setStatusCode(401);
+				$response->setBody(json_encode([
+					'message' => 'Unauthenticated'
+				]));
+				return $response;
+			}
+		}
 	}
 
 	/**

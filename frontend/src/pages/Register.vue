@@ -122,25 +122,7 @@ export default {
           this.$router.push('/')
         }
       }).catch((err) => {
-        if (err === 'ROUTE_MISSING') {
-          this.$q.dialog({
-            title: 'Select Backend',
-            options: {
-              type: 'radio',
-              model: 'laravel',
-              items: [
-                { label: 'Laravel', value: 'laravel' },
-                { label: 'Codeigniter', value: 'codeigniter' },
-                { label: 'Core PHP', value: 'corephp', disable: true }
-              ]
-            },
-            cancel: false,
-            persistent: true
-          }).onOk((data) => {
-            this.$store.dispatch('setRoute',data)
-            this.initFn()
-          })
-        }
+        console.log(err)
       }).finally(() => {
         this.appLoading = false
       })

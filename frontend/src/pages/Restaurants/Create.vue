@@ -542,18 +542,30 @@ export default {
           if (this.$route.params.id) {
             route = 'restaurants/' + this.$route.params.id
             this.model._method = 'PUT'
+            this.$axios.put(route,this.model).then((res) => {
+              if (res.data.message === 'success') {
+                this.$q.notify({
+                  message: 'Data Saved Successfully',
+                  type: 'positive'
+                })
+                this.$router.push('/restaurants')
+              }
+            }).finally(() => {
+              this.$q.loading.hide()
+            })
+          } else {
+            this.$axios.post(route,this.model).then((res) => {
+              if (res.data.message === 'success') {
+                this.$q.notify({
+                  message: 'Data Saved Successfully',
+                  type: 'positive'
+                })
+                this.$router.push('/restaurants')
+              }
+            }).finally(() => {
+              this.$q.loading.hide()
+            })
           }
-          this.$axios.post(route,this.model).then((res) => {
-            if (res.data.message === 'success') {
-              this.$q.notify({
-                message: 'Data Saved Successfully',
-                type: 'positive'
-              })
-              this.$router.push('/restaurants')
-            }
-          }).finally(() => {
-            this.$q.loading.hide()
-          })
         } else {
           this.$q.notify({
             message: 'There are errors in the data submitted.',
@@ -585,7 +597,7 @@ export default {
       }).onOk(() => {
         if (model.id) {
           this.$q.loading.show()
-          this.$axios.post('options/' + model.id, { _method: 'DELETE' }).then((res) => {
+          this.$axios.delete('options/' + model.id, { _method: 'DELETE' }).then((res) => {
             if (res.data.message === 'success') {
               this.addon.options.splice(i,1)
             }
@@ -613,7 +625,7 @@ export default {
       }).onOk(() => {
         if (model.id) {
           this.$q.loading.show()
-          this.$axios.post('addons/' + model.id, { _method: 'DELETE' }).then((res) => {
+          this.$axios.delete('addons/' + model.id, { _method: 'DELETE' }).then((res) => {
             if (res.data.message === 'success') {
               this.item.addons.splice(i,1)
             }
@@ -641,7 +653,7 @@ export default {
       }).onOk(() => {
         if (model.id) {
           this.$q.loading.show()
-          this.$axios.post('items/' + model.id, { _method: 'DELETE' }).then((res) => {
+          this.$axios.delete('items/' + model.id, { _method: 'DELETE' }).then((res) => {
             if (res.data.message === 'success') {
               this.model.items.splice(i,1)
             }

@@ -2,13 +2,13 @@ import Vue from 'vue'
 import axios from 'axios'
 
 let axiosInstance = axios.create({
-  baseURL: 'http://97eats-laravel.ss/api',
+  baseURL: 'http://laravel.97eats-test.ss/api',
   withCredentials: true
 })
 
 if (process.env.PROD) {
   axiosInstance = axios.create({
-    baseURL: 'http://97eats-laravel.ml/api',
+    baseURL: 'http://laravel.97eats-test.ml/api',
     withCredentials: true
   })
 }

@@ -21,6 +21,10 @@ class Filters extends BaseConfig
 		'honeypot' => Honeypot::class,
 		'cors' => \Fluent\Cors\Filters\CorsFilter::class,
 		'token' => TokenAuth::class,
+		'cors-token' => [
+			\Fluent\Cors\Filters\CorsFilter::class,
+			TokenAuth::class,
+		]
 	];
 
 	/**

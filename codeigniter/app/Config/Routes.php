@@ -34,15 +34,17 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->group('api', ['filter' => 'cors'], function($routes) {
 	$routes->get('/', 'Home::index');
-	$routes->get('user','Home::user',['filter' => 'token']);
 	$routes->post('login','Auth::login');
 	$routes->post('register','Auth::register');
-	$routes->resource('restaurants', ['except' => 'new,edit', 'placeholder' => '(:num)']);
-	$routes->resource('items', ['only' => 'delete', 'placeholder' => '(:num)']);
-	$routes->resource('addons', ['only' => 'delete', 'placeholder' => '(:num)']);
-	$routes->resource('options', ['only' => 'delete', 'placeholder' => '(:num)']);
 });
-
+$routes->group('api', ['filter' => 'cors-token'], function($routes) {
+	$routes->get('user','Home::user');
+	$routes->resource('restaurants', ['except' => 'new,edit', 'placeholder' => '(:num)']);
+	$routes->delete('items/(:num)','Items::delete/$1');
+	$routes->delete('addons/(:num)','ItemAddons::delete/$1');
+	$routes->delete('options/(:num)','ItemAddonOptions::delete/$1');
+	$routes->post('image', 'Home::image');
+});
 /*
  * --------------------------------------------------------------------
  * Additional Routing

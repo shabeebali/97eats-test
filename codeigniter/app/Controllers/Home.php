@@ -21,4 +21,12 @@ class Home extends BaseController
 		$decoded = JWT::decode($requestToken,$key,array('HS256'));
 		return $this->respond((array) $decoded);
 	}
+
+	public function image()
+	{
+		$file = $this->request->getFile('file');
+		$filename = $file->getRandomName();
+		$file->move(ROOTPATH.'public'.DIRECTORY_SEPARATOR.'storage',$filename);
+		return $this->respond($filename);
+	}
 }

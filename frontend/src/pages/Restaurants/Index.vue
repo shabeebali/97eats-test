@@ -51,12 +51,7 @@ export default {
     }
   },
   mounted () {
-    this.$q.loading.show()
-    this.$axios.get('restaurants').then((res) => {
-      this.items = res.data
-    }).finally(() => {
-      this.$q.loading.hide()
-    })
+    this.getDataFromApi()
   },
   methods: {
     deleteFn (id) {
@@ -73,14 +68,23 @@ export default {
           color: 'green'
         }
       }).onOk(() => {
-        this.$axios.post('restaurants/' + id, { _method: 'DELETE' }).then((res) => {
+        this.$axios.delete('restaurants/' + id, { _method: 'DELETE' }).then((res) => {
           if (res.data.message === 'success') {
             this.$q.notify({
               message: 'Record Deleted from database',
               type: 'info'
             })
+            this.getDataFromApi()
           }
         })
+      })
+    },
+    getDataFromApi () {
+      this.$q.loading.show()
+      this.$axios.get('restaurants').then((res) => {
+        this.items = res.data
+      }).finally(() => {
+        this.$q.loading.hide()
       })
     }
   }

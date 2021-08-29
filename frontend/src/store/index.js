@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { axiosInstance } from 'boot/axios'
 import { LocalStorage } from 'quasar'
+import { Dialog } from 'quasar'
+
 // import example from './module-example'
 
 Vue.use(Vuex)
@@ -44,22 +46,56 @@ export default function (/* { ssrContext } */) {
       init ({ state, commit }) {
         return new Promise(function(resolve,reject) {
           if (!state.route) {
-            reject('ROUTE_MISSING')
-            return
-          }
-          if (localStorage.token) {
-            axiosInstance.defaults.headers.common['Authorization'] = 'Bearer '+ localStorage.token
-            axiosInstance.get('user').then((res) => {
-              if (res.status === 200) {
-                resolve('authenticated')
+            Dialog.create({
+              title: 'Select Backend',
+              options: {
+                type: 'radio',
+                model: 'laravel',
+                items: [
+                  { label: 'Laravel', value: 'laravel' },
+                  { label: 'Codeigniter', value: 'codeigniter' },
+                  { label: 'Core PHP', value: 'corephp', disable: true }
+                ]
+              },
+              cancel: false,
+              persistent: true
+            }).onOk((data) => {
+              commit('setRoute', data)
+              if (process.env.PROD) {
+                axiosInstance.defaults.baseURL = 'http://' + data + '.97eats-test.ml/api'
+              } else {
+                axiosInstance.defaults.baseURL = 'http://' + data + '.97eats-test.ss/api'
+              }
+              if (localStorage.token) {
+                axiosInstance.defaults.headers.common['Authorization'] = 'Bearer '+ localStorage.token
+                axiosInstance.get('user').then((res) => {
+                  if (res.status === 200) {
+                    resolve('authenticated')
+                  } else {
+                    reject('unauthenticated')
+                  }
+                }).catch((e) => {
+                  reject('unauthenticated')
+                })
               } else {
                 reject('unauthenticated')
               }
-            }).catch((e) => {
-              reject('unauthenticated')
             })
           } else {
-            reject('unauthenticated')
+            if (localStorage.token) {
+              axiosInstance.defaults.headers.common['Authorization'] = 'Bearer '+ localStorage.token
+              axiosInstance.get('user').then((res) => {
+                if (res.status === 200) {
+                  resolve('authenticated')
+                } else {
+                  reject('unauthenticated')
+                }
+              }).catch((e) => {
+                reject('unauthenticated')
+              })
+            } else {
+              reject('unauthenticated')
+            }
           }
         })
       }
