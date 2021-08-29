@@ -23,7 +23,7 @@ class App extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $baseURL = 'http://codeigniter.97eats-test.ss/';
+	public $baseURL = 'http://codeigniter.97eats-test.ml/';
 
 	/**
 	 * --------------------------------------------------------------------------
