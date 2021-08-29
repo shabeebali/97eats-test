@@ -2,7 +2,7 @@
 
 // Path to the front controller (this file)
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
-define("ENVIRONMENT","development");
+define("ENVIRONMENT","production");
 define('CI_DEBUG', false);
 /*
  *---------------------------------------------------------------
